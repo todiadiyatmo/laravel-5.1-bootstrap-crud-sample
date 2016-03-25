@@ -41,12 +41,21 @@ class TweetController extends Controller {
 	{
 		$tweet = new Tweet();
 
+		$validator = $tweet->validate($request->all());
+
+        if ($validator->fails()) {
+            return redirect('tweets/create')
+                    ->withErrors($validator)
+                    ->with(['message'=>'Opps! Please fix the error bellow','type'=>'danger'])
+                    ->withInput();
+        }
+
 		$tweet->title = $request->input("title");
         $tweet->body = $request->input("body");
 
 		$tweet->save();
 
-		return redirect()->route('tweets.index')->with('message', 'Item created successfully.');
+		return redirect()->route('tweets.index')->with(['message'=>'Item created successfully.','type'=>'success']);
 	}
 
 	/**
@@ -86,12 +95,21 @@ class TweetController extends Controller {
 	{
 		$tweet = Tweet::findOrFail($id);
 
+		$validator = $tweet->validate($request->all());
+
+        if ($validator->fails()) {
+            return redirect('tweets/'.$id.'/edit')
+                    ->withErrors($validator)
+                    ->with(['message'=>'Opps! Please fix the error bellow','type'=>'danger'])
+                    ->withInput();
+        }
+
 		$tweet->title = $request->input("title");
         $tweet->body = $request->input("body");
 
 		$tweet->save();
 
-		return redirect()->route('tweets.index')->with('message', 'Item updated successfully.');
+		return redirect()->route('tweets.index')->with(['message'=>'Item updated successfully.','type'=>'success']);
 	}
 
 	/**
@@ -105,7 +123,7 @@ class TweetController extends Controller {
 		$tweet = Tweet::findOrFail($id);
 		$tweet->delete();
 
-		return redirect()->route('tweets.index')->with('message', 'Item deleted successfully.');
+		return redirect()->route('tweets.index')->with(['message'=>'Item deleted successfully.','type'=>'success']);
 	}
 
 }

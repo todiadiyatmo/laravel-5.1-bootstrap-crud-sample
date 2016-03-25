@@ -9,7 +9,7 @@
 </div>
 <div class="form-group @if($errors->has('body')) has-error @endif">
    <label for="body-field">Body</label>
-   {!! Form::text('body', $tweet->body , ['class'=> 'form-control']) !!}
+   {!! Form::textarea('body', $tweet->body , ['class'=> 'form-control']) !!}
    @if($errors->has("body"))
     <span class="help-block">{{ $errors->first("body") }}</span>
    @endif
